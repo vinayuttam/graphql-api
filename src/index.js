@@ -5,7 +5,7 @@ const { ApolloServer, gql } = require('apollo-server-express');
 
 const schema = require('./schema');
 const app = express();
-const PORT = process.env.PORT;
+const PORT = 8080;
 
 const server = new ApolloServer({
   schema,
