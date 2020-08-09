@@ -5,7 +5,9 @@ const { ApolloServer, gql } = require('apollo-server-express');
 
 const schema = require('./schema');
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT;
+
+console.log(process.env.PORT, process.env.MONGODB_URI)
 
 const server = new ApolloServer({
   schema,
@@ -29,33 +31,34 @@ const server = new ApolloServer({
   },
 });
 
-server.applyMiddleware({ app });
+// server.applyMiddleware({ app });
+server.listen(process.env.PORT)
 
-const httpServer = http.createServer(app);
-server.installSubscriptionHandlers(httpServer);
+// const httpServer = http.createServer(app);
+// server.installSubscriptionHandlers(httpServer);
 
-const mongooseOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+// const mongooseOptions = {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// };
 
-mongoose.connect(process.env.MONGODB_URI, mongooseOptions, err => {
-  if (err) {
-    console.log(`Could not connect to database at ${process.env.MONGODB_URI}`);
-    process.exit(1);
-  }
+// mongoose.connect(process.env.MONGODB_URI, mongooseOptions, err => {
+//   if (err) {
+//     console.log(`Could not connect to database at ${process.env.MONGODB_URI}`);
+//     process.exit(1);
+//   }
 
 
-  console.log(`Successfully connected to database at ${process.env.MONGODB_URI}`);
+//   console.log(`Successfully connected to database at ${process.env.MONGODB_URI}`);
 
-  httpServer.listen({ port: PORT }, err => {
-    if (err) {
-      console.log(`Could not connect to GraphQL Server!`);
-      process.exit(1);
-    }
+//   httpServer.listen({ port: PORT }, err => {
+//     if (err) {
+//       console.log(`Could not connect to GraphQL Server!`);
+//       process.exit(1);
+//     }
 
-    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
-    console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
-  });
-});
+//     console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+//     console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
+//   });
+// });
 
